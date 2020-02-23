@@ -4,12 +4,15 @@ import { createStackNavigator } from 'react-navigation-stack';
 import HomePage from './src/pages/HomePage'
 
 const AppNavigator = createStackNavigator({
-  'Home': {
+  'Main': {
     screen: HomePage,
     navigationOptions:{
       title: 'Bem Vindo',
     }
   },
+  'Curriculum': {
+    screen: CurriculumPage
+  }
 }, {
   defaultNavigationOptions: {
     title: "Curriculum",
