@@ -1,19 +1,78 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { createAppContainer} from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 
-export default function App() {
-  return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-    </View>
-  );
-}
+import HomePage from './src/pages/HomePage'
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+const AppNavigator = createStackNavigator({
+  'Home': {
+    screen: HomePage,
+    navigationOptions:{
+      title: 'Bem Vindo',
+    }
   },
+}, {
+  defaultNavigationOptions: {
+    title: "Curriculum",
+    headerTintColor: 'white',
+    headerStyle: {
+      backgroundColor: '#4a42f7',
+      borderBottomWidth: 1,
+      borderBottomColor: 'c5c5c5',
+
+    },
+    headerTitleStyle: {
+      color: 'white',
+      fontSize: 30,
+    }
+  }
 });
+export default createAppContainer(AppNavigator);
+
+/*
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
+
+import PeoplePage from "./src/pages/PeoplePage";
+import PeopleDetailPage from './src/pages/PeopleDatailPage';
+
+import { capitalizeFirstLetter } from "./src/util";
+
+const AppNavigator = createStackNavigator({
+  'Main': {
+    screen: PeoplePage
+  },
+  'PeopleDetail': {
+    screen: PeopleDetailPage,
+    navigationOptions: ({ navigation }) => {
+      const peopleName = capitalizeFirstLetter(navigation.state.params.people.name.first);
+      return ({
+        title: peopleName,
+        headerTitleAlign:'left',
+        headerTitleStyle: {
+          color: 'white',
+          fontSize: 30,
+        },
+      });
+    }
+  }
+}, {
+  defaultNavigationOptions: {
+    title: 'Pessoas',
+    headerTitleAlign:'center',
+    headerTintColor: 'white',
+    headerStyle: {
+      backgroundColor: '#6ca2f7',
+      borderBottomWidth: 1,
+      borderBottomColor: '#c5c5c5',
+    },
+    headerTitleStyle: {
+      color: 'white',
+      fontSize: 30,
+    },
+  }
+});
+
+const AppContainer = createAppContainer(AppNavigator);
+
+export default AppContainer;
+ */
