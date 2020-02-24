@@ -1,7 +1,8 @@
 import { createAppContainer} from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import HomePage from './src/pages/HomePage'
+import HomePage from './src/pages/HomePage';
+import CurriculumPage from "./src/pages/CurriculumPage";
 
 const AppNavigator = createStackNavigator({
   'Main': {
@@ -11,7 +12,10 @@ const AppNavigator = createStackNavigator({
     }
   },
   'Curriculum': {
-    screen: CurriculumPage
+    screen: CurriculumPage,
+    navigationOptions:{
+      title: 'Curriculos',
+    }
   }
 }, {
   defaultNavigationOptions: {

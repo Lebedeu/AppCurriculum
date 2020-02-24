@@ -3,6 +3,7 @@ import { View, StyleSheet, TextInput, Button} from 'react-native';
 import FormRow from "../components/FormRow";
 import firebase from '@firebase/app/';
 import '@firebase/auth';
+import * as navigation from "react-navigation";
 
 export default class HomePage extends React.Component {
   constructor(props) {
@@ -12,6 +13,7 @@ export default class HomePage extends React.Component {
       nome: '',
       email: '',
       telefone: '',
+      habilidades: '',
     }
   }
 
@@ -40,9 +42,9 @@ export default class HomePage extends React.Component {
     });
   }
 
-  tryRegister() {
-    console.log(this.state);
-  }
+  toRegister = () => {
+    this.props.navigation.navigate('Curriculum', this.state);
+  };
 
   render() {
     return(
@@ -65,7 +67,7 @@ export default class HomePage extends React.Component {
           />
         </FormRow>
 
-        <FormRow last>
+        <FormRow>
           <TextInput
             style={styles.input}
             placeholder="Telefone"
@@ -74,9 +76,18 @@ export default class HomePage extends React.Component {
           />
         </FormRow>
 
+        <FormRow last>
+          <TextInput
+            style={styles.input}
+            placeholder="Principais Habilidades"
+            value={this.state.habilidades}
+            onChangeText={value => this.onChangeHandler('habilidades', value)}
+          />
+        </FormRow>
+
         <Button
           title="Cadastrar"
-          onPress={() => this.tryRegister()}
+          onPress={() => this.toRegister()}
         />
       </View>
     )
