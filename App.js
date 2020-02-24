@@ -1,22 +1,44 @@
 import { createAppContainer} from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
 
-import HomePage from './src/pages/HomePage';
-import CurriculumPage from "./src/pages/CurriculumPage";
+import MainPage from "./src/pages/MainPage";
+import DetailPage from "./src/pages/DetailPage";
+import SearchPage from "./src/pages/SearchPage";
+import UpdatePage from "./src/pages/UpdatePage";
+import RegisterPage from "./src/pages/RegisterPage";
 
 const AppNavigator = createStackNavigator({
-  'Main': {
-    screen: HomePage,
-    navigationOptions:{
-      title: 'Bem Vindo',
+
+  Main: {
+    screen: MainPage,
+    navigationOptions: {
+      title: 'Welcome to Main',
     }
   },
-  'Curriculum': {
-    screen: CurriculumPage,
-    navigationOptions:{
-      title: 'Curriculos',
+  Detail: {
+    screen: DetailPage,
+    navigationOptions: {
+      title: 'Welcome to Detail',
     }
-  }
+  },
+  Search: {
+    screen: SearchPage,
+    navigationOptions: {
+      title: 'Welcome to Search',
+    }
+  },
+  Update: {
+    screen: UpdatePage,
+    navigationOptions: {
+      title: 'Welcome to Update',
+    }
+  },
+  Register: {
+    screen: RegisterPage,
+    navigationOptions: {
+      title: 'Welcome to Register',
+    }
+  },
 }, {
   defaultNavigationOptions: {
     title: "Curriculum",

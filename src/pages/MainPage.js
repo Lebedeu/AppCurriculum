@@ -3,9 +3,8 @@ import { View, StyleSheet, TextInput, Button} from 'react-native';
 import FormRow from "../components/FormRow";
 import firebase from '@firebase/app/';
 import '@firebase/auth';
-import * as navigation from "react-navigation";
 
-export default class HomePage extends React.Component {
+export default class MainPage extends React.Component {
   constructor(props) {
     super(props);
 
@@ -43,7 +42,7 @@ export default class HomePage extends React.Component {
   }
 
   toRegister = () => {
-    this.props.navigation.navigate('Curriculum', this.state);
+    this.props.navigation.navigate('Detail', this.state);
   };
 
   render() {
