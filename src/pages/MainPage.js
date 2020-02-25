@@ -1,6 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, TextInput, Button} from 'react-native';
-import FormRow from "../components/FormRow";
+import {ActivityIndicator, View, StyleSheet, Text, Button} from 'react-native';
 import firebase from '@firebase/app/';
 import '@firebase/auth';
 
@@ -9,11 +8,8 @@ export default class MainPage extends React.Component {
     super(props);
 
     this.state = {
-      nome: '',
-      email: '',
-      telefone: '',
-      habilidades: '',
-    }
+      loading: false,
+    };
   }
 
   componentDidMount() {
@@ -35,59 +31,37 @@ export default class MainPage extends React.Component {
 
   }
 
-  onChangeHandler (field, value) {
-    this.setState({
-      [field]: value
-    });
-  }
-
   toRegister = () => {
-    this.props.navigation.navigate('Detail', this.state);
+    this.props.navigation.navigate('Register');
   };
 
+  toSearch = () => {
+    this.props.navigation.navigate('Search');
+  };
+
+
+
   render() {
+
+    const data = this.props.navigation.state.params;
+    console.log('Test:');
+    console.log(this.props.navigation.state.params == undefined);
+
     return(
       <View style={styles.container}>
-        <FormRow first>
-          <TextInput
-            style={styles.input}
-            placeholder="Nome"
-            value={this.state.nome}
-            onChangeText={value => this.onChangeHandler('nome', value)}
+        <Text>
+          texto
+        </Text>
+        <View style={styles.button}>
+          <Button
+            title="Cadastrar"
+            onPress={() => this.toRegister()}
           />
-        </FormRow>
-
-        <FormRow >
-          <TextInput
-            style={styles.input}
-            placeholder="E-mail"
-            value={this.state.email}
-            onChangeText={value => this.onChangeHandler('email', value)}
+          <Button
+            title="Pesquisar"
+            onPress={() => this.toSearch()}
           />
-        </FormRow>
-
-        <FormRow>
-          <TextInput
-            style={styles.input}
-            placeholder="Telefone"
-            value={this.state.telefone}
-            onChangeText={value => this.onChangeHandler('telefone', value)}
-          />
-        </FormRow>
-
-        <FormRow last>
-          <TextInput
-            style={styles.input}
-            placeholder="Principais Habilidades"
-            value={this.state.habilidades}
-            onChangeText={value => this.onChangeHandler('habilidades', value)}
-          />
-        </FormRow>
-
-        <Button
-          title="Cadastrar"
-          onPress={() => this.toRegister()}
-        />
+        </View>
       </View>
     )
   }
@@ -97,10 +71,19 @@ const styles = StyleSheet.create({
   container: {
     paddingLeft: 10,
     paddingRight: 10,
+    flex: 1,
+    justifyContent: 'center',
   },
-  input: {
-    paddingLeft: 5,
-    paddingRight: 5,
+  button: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+  },
+  list: {
+    flexGrow: 1,
+    justifyContent: 'center',
+    backgroundColor: 'red',
   }
 });
+
+
 
