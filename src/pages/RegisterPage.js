@@ -1,9 +1,9 @@
 import React from 'react';
-import { TouchableOpacity, View, StyleSheet, Text,TextInput, Button} from 'react-native';
+import { ScrollView, View, StyleSheet, Text,TextInput, Button, Image} from 'react-native';
 import FormRow from "../components/FormRow";
-import noimage from '../components/noimage.png'
 import * as Permissions from "expo-permissions";
 import * as ImagePicker from 'expo-image-picker';
+import Camera from '../components/Camera'
 
 export default class MainPage extends React.Component {
   constructor(props) {
@@ -14,11 +14,9 @@ export default class MainPage extends React.Component {
       email: '',
       tel: '',
       skill: '',
-      image: [],
+      image: '',
     }
   }
-
-
 
   onChangeHandler (field, value) {
     this.setState({
@@ -41,33 +39,12 @@ export default class MainPage extends React.Component {
     this.props.navigation.navigate('Main');
   };
 
-  async pickImage() {
-    console.log("selecionar uma imagem");
-
-    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-    if (status !== 'granted') {
-      console.log('Acesso negado');
-      return;
-    }
-    const result = await ImagePicker.launchImageLibraryAsync({
-      quality: 0.2,
-      base64: true,
-    });
-
-    if(!(await result).cancelled) {
-      console.log('imagem ok', result.base64);
-    }
-  }
-
   render() {
     return(
-      <View style={styles.container}>
+      <ScrollView style={styles.container}>
 
         <FormRow first>
-          <Button
-            title="Selecione uma imagem"
-            onPress={() => this.pickImage()}
-          />
+          <Camera/>
         </FormRow>
 
         <FormRow>
@@ -119,7 +96,7 @@ export default class MainPage extends React.Component {
             onPress={() => this.toMain()}
           />
         </View>
-      </View>
+      </ScrollView>
     )
   }
 }
@@ -134,13 +111,15 @@ const styles = StyleSheet.create({
     paddingRight: 5,
   },
   image: {
-    // flex: 1,
-    textAlign: 'center',
+    aspectRatio: 1,
+    width: '100%',
   },
   button: {
     flexDirection: 'row',
     justifyContent: 'space-between',
   }
 });
+
+
 
 

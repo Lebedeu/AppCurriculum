@@ -11,7 +11,7 @@ export default class UpdatePage extends React.Component {
       email: '',
       tel: '',
       skill: '',
-      image: [],
+      image: '',
     }
   }
 
