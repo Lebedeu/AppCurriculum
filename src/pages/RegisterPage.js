@@ -1,14 +1,15 @@
 import React from 'react';
-import { ScrollView, View, StyleSheet, Text,TextInput, Button, Image} from 'react-native';
+import { KeyboardAvoidingView, ScrollView, View, StyleSheet, Button,TextInput, TouchableOpacity, Alert} from 'react-native';
 import FormRow from "../components/FormRow";
-import * as Permissions from "expo-permissions";
-import * as ImagePicker from 'expo-image-picker';
-import Camera from '../components/Camera'
+import Camera from '../components/Camera';
+
+import firebase from '@firebase/app/';
+import '@firebase/auth';
+import '@firebase/database';
 
 export default class MainPage extends React.Component {
   constructor(props) {
     super(props);
-
     this.state = {
       name: '',
       email: '',
@@ -24,78 +25,138 @@ export default class MainPage extends React.Component {
     });
   }
 
-  toDetail = () => {
-    this.props.navigation.navigate('Detail', this.state);
+  confirmReg = () => {
+    console.log(`confirReg`)
+    firebase.database().ref('curriculums').once('value', (data) => {
+      var existe = true;
+      this.data = data.toJSON();
+
+      console.log(this.data);
+      if(this.data === null) {
+        console.log(`Dentro do IF`);
+        existe = false;
+      } else {
+        console.log(`Dentro do ELSE`);
+        console.log(`Entrando no FOR`);
+        for (var property in this.data){
+          if(this.data[property].name === this.state.name) {
+            existe = true;
+
+            Alert.alert(
+              'Erro ao Cadastrar',
+              'Currículo já cadastrado',
+              [
+                {text: 'OK', onPress: () => console.log('OK Pressed')},
+              ],
+              {cancelable: false},
+            );
+
+            return;
+          } else {
+            existe = false;
+          };
+        }
+      }
+
+      if(!existe) {
+        Alert.alert(
+          'Cadastro sendo realizado',
+          'Pro favor, aguarde',
+          [
+            {text: 'OK', onPress: () => console.log('OK Pressed')},
+          ],
+          {cancelable: false},
+        );
+        setTimeout( () => {
+          firebase.database().ref(`curriculums/${this.state.name}`).set(
+            this.state
+          ).then(() => {
+            console.log('Cadastrado');
+            console.log('ÈSta sendo mandado');
+            console.log(this.state.name);
+            this.props.navigation.navigate('Detail', this.state.name);
+          }).catch((error) => {
+            console.log(error);
+          });
+        }, 2000);
+      }
+    });
+
   };
 
-  toMain = () => {
+  backToMain = () => {
     this.setState({
       name: '',
       email: '',
       tel: '',
       skill: '',
-      image: [],
+      image: '',
     })
     this.props.navigation.navigate('Main');
   };
 
   render() {
     return(
-      <ScrollView style={styles.container}>
+      <ScrollView>
 
-        <FormRow first>
-          <Camera/>
-        </FormRow>
+        <KeyboardAvoidingView style={styles.container} behavior='position' enabled>
 
-        <FormRow>
-          <TextInput
-            style={styles.input}
-            placeholder="Nome"
-            value={this.state.name}
-            onChangeText={value => this.onChangeHandler('name', value)}
-          />
-        </FormRow>
+          <FormRow first >
+            <Camera />
+          </FormRow>
 
-        <FormRow >
-          <TextInput
-            style={styles.input}
-            placeholder="E-mail"
-            keyboardType={'email-address'}
-            value={this.state.email}
-            onChangeText={value => this.onChangeHandler('email', value)}
-          />
-        </FormRow>
+          <FormRow>
+            <TextInput
+              style={styles.input}
+              placeholder="Nome"
+              value={this.state.name}
+              onChangeText={value => this.onChangeHandler('name', value)}
+            />
+          </FormRow>
 
-        <FormRow>
-          <TextInput
-            style={styles.input}
-            placeholder="Telefone"
-            keyboardType={'numeric'}
-            value={this.state.tel}
-            onChangeText={value => this.onChangeHandler('tel', value)}
-          />
-        </FormRow>
+          <FormRow >
+            <TextInput
+              style={styles.input}
+              placeholder="E-mail"
+              keyboardType={'email-address'}
+              value={this.state.email}
+              onChangeText={value => this.onChangeHandler('email', value)}
+            />
+          </FormRow>
 
-        <FormRow last>
-          <TextInput
-            style={styles.input}
-            placeholder="Principais Habilidades"
-            multiline
-            value={this.state.skill}
-            onChangeText={value => this.onChangeHandler('skill', value)}
-          />
-        </FormRow>
+          <FormRow>
+            <TextInput
+              style={styles.input}
+              placeholder="Telefone"
+              keyboardType={'numeric'}
+              value={this.state.tel}
+              onChangeText={value => this.onChangeHandler('tel', value)}
+            />
+          </FormRow>
 
-        <View style={styles.button}>
-          <Button
-            title="Confirmar"
-            onPress={() => this.toDetail()}
-          />
-          <Button
-            title="Cancelar"
-            onPress={() => this.toMain()}
-          />
-        </View>
+          <FormRow last>
+            <TextInput
+              style={styles.input}
+              placeholder="Principais Habilidades"
+              multiline
+              value={this.state.skill}
+              onChangeText={value => this.onChangeHandler('skill', value)}
+            />
+          </FormRow>
+
+          <View style={styles.button}>
+            <Button
+              title="Confirmar"
+              onPress={() => this.confirmReg()}
+            />
+            <Button
+              title="Cancelar"
+              onPress={() => this.backToMain()}
+            />
+          </View>
+
+        </KeyboardAvoidingView>
+
       </ScrollView>
     )
   }
@@ -103,8 +164,7 @@ export default class MainPage extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: 10,
-    paddingRight: 10,
+    padding: 10,
   },
   input: {
     paddingLeft: 5,
@@ -116,10 +176,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-  }
+    justifyContent: 'space-around',
+    marginBottom: 20,
+  },
 });
-
-
-
-

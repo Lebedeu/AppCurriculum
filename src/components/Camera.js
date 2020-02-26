@@ -4,7 +4,6 @@ import * as ImagePicker from 'expo-image-picker';
 import photo from '../components/photo.png'
 
 export default function App() {
-  var image = '';
 
   let [selectedImage, setSelectedImage] = React.useState(null);
 
@@ -30,10 +29,6 @@ export default function App() {
   };
 
   if (selectedImage !== null) {
-    image = selectedImage;
-    console.log(selectedImage);
-    console.log('----****** IMAGEM ******-------');
-    console.log(image);
     return (
       <TouchableOpacity onPress={openImagePickerAsync} style={styles.container}>
         <Image source={{ uri: selectedImage.localUri }} style={styles.thumbnail} />

@@ -1,6 +1,12 @@
 import React from 'react';
-import {View, StyleSheet, Text, TextInput, Button} from 'react-native';
+import {View, StyleSheet, Text, TextInput, Button, KeyboardAvoidingView, ScrollView, Alert} from 'react-native';
+
 import FormRow from "../components/FormRow";
+import Camera from '../components/Camera';
+
+import firebase from '@firebase/app/';
+import '@firebase/auth';
+import '@firebase/database';
 
 export default class UpdatePage extends React.Component {
   constructor(props) {
@@ -13,114 +19,171 @@ export default class UpdatePage extends React.Component {
       skill: '',
       image: '',
     }
-  }
+  };
+  dataAux = {
+    name: '',
+    email: '',
+    tel: '',
+    skill: '',
+    image: '',
+  };
 
   onChangeHandler (field, value) {
     this.setState({
       [field]: value
     });
-  }
+  };
 
-  goMain = (data) => {
-    this.props.navigation.navigate('Main', data);
-  }
+  toCancelUpdate = () => {
+    this.setState({
+      name: '',
+      email: '',
+      tel: '',
+      skill: '',
+      image: '',
+    });
+    this.props.navigation.navigate('Main');
+  };
 
-  toCancelUpdate = (data) => {
-    this.props.navigation.navigate('Detail', data);
-  }
+  toConfirmUpdate = () => {
 
-  toConfirmUpdate = (data) => {
-    if(this.state.name != "")
-      data.name = this.state.name;
-    if(this.state.email != "")
-      data.email = this.state.email;
-    if(this.state.tel != "")
-      data.tel = this.state.tel;
-    if(this.state.skill != "")
-      data.skill = this.state.skill;
-    if(this.state.image != "")
-      data.image = this.state.image;
+    if(this.state.name == "") {
+      this.state.name = this.dataAux.name;
+    }
+    if(this.state.email == "") {
+      this.state.email = this.dataAux.email;
+    }
+    if(this.state.tel == "") {
+      this.state.tel = this.dataAux.tel;
+    }
+    if(this.state.skill == "") {
+      this.state.skill = this.dataAux.skill;
+    }
+    if(this.state.image == "") {
+      this.state.image = this.dataAux.image;
+    }
 
-    this.props.navigation.navigate('Detail', data);
+    console.log(this.state);
+    console.log(this.dataAux);
+
+    firebase.database().ref(`curriculums/${this.state.name}`).set(
+      this.state
+    ).then(() => {
+      Alert.alert(
+        'Atualizando',
+        'Pro favor, aguarde',
+        [
+          {text: 'OK', onPress: () => console.log('OK Pressed')},
+        ],
+        {cancelable: false},
+      );
+      this.props.navigation.navigate('Detail', this.state.name);
+    }).catch((error) => {
+      console.log(error);
+    });
+
   };
 
   render() {
-    var data = this.props.navigation.state.params;
+    const name = this.props.navigation.state.params;
+
+    firebase.database().ref('curriculums').once('value', (data) => {
+      this.data = data.toJSON();
+
+      for (let property in this.data){
+        if(this.data[property].name == name) {
+
+          this.dataAux.name = this.data[property].name;
+          this.dataAux.email = this.data[property].email;
+          this.dataAux.tel = this.data[property].tel;
+          this.dataAux.skill = this.data[property].skill;
+          this.dataAux.image = this.data[property].image;
+
+        }
+      }
+    });
+
     return(
-      <View style={styles.container}>
+      <ScrollView>
 
-        <Text style={styles.image}>
-          Foto
-        </Text>
+        <KeyboardAvoidingView style={styles.container} behavior='position' enabled>
 
-        <FormRow first>
-          <TextInput
-            style={styles.input}
-            placeholder={data.name}
-            onChangeText={value => this.onChangeHandler('name', value)}
-          />
-        </FormRow>
+          <FormRow first >
+            <Camera />
+          </FormRow>
 
-        <FormRow >
-          <TextInput
-            style={styles.input}
-            placeholder={data.email}
-            keyboardType={'email-address'}
-            onChangeText={value => this.onChangeHandler('email', value)}
-          />
-        </FormRow>
+          <FormRow>
+            <TextInput
+              style={styles.input}
+              placeholder={this.dataAux.name}
+              value={this.state.name}
+              onChangeText={value => this.onChangeHandler('name', value)}
+            />
+          </FormRow>
 
-        <FormRow>
-          <TextInput
-            style={styles.input}
-            placeholder={data.tel}
-            keyboardType={'numeric'}
-            onChangeText={value => this.onChangeHandler('tel', value)}
-          />
-        </FormRow>
+          <FormRow >
+            <TextInput
+              style={styles.input}
+              placeholder={this.dataAux.email}
+              keyboardType={'email-address'}
+              value={this.state.email}
+              onChangeText={value => this.onChangeHandler('email', value)}
+            />
+          </FormRow>
 
-        <FormRow last>
-          <TextInput
-            style={styles.input}
-            placeholder={data.skill}
-            onChangeText={value => this.onChangeHandler('skill', value)}
-          />
-        </FormRow>
+          <FormRow>
+            <TextInput
+              style={styles.input}
+              placeholder={this.dataAux.tel}
+              keyboardType={'numeric'}
+              value={this.state.tel}
+              onChangeText={value => this.onChangeHandler('tel', value)}
+            />
+          </FormRow>
 
-        <View style={styles.button}>
-          <Button
-            title="Confirmar"
-            onPress={() => this.toConfirmUpdate(data)}
-          />
-          <Button
-            title="Inicio"
-            onPress={() => this.goMain()}
-          />
-          <Button
-            title="Cancelar"
-            onPress={() => this.toCancelUpdate()}
-          />
-        </View>
-      </View>
+          <FormRow last>
+            <TextInput
+              style={styles.input}
+              placeholder={this.dataAux.skill}
+              multiline
+              value={this.state.skill}
+              onChangeText={value => this.onChangeHandler('skill', value)}
+            />
+          </FormRow>
+
+          <View style={styles.button}>
+            <Button
+              title="Confirmar"
+              onPress={() => this.toConfirmUpdate()}
+            />
+            <Button
+              title="Cancelar"
+              onPress={() => this.toCancelUpdate()}
+            />
+          </View>
+
+        </KeyboardAvoidingView>
+
+      </ScrollView>
     )
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    paddingLeft: 10,
-    paddingRight: 10,
+    padding: 10,
   },
   input: {
     paddingLeft: 5,
     paddingRight: 5,
   },
   image: {
-    // flex: 1,
-    textAlign: 'center',
+    aspectRatio: 1,
+    width: '100%',
   },
   button: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
-  }
+    justifyContent: 'space-around',
+    marginBottom: 20,
+  },
 });

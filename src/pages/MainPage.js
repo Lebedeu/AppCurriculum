@@ -2,6 +2,7 @@ import React from 'react';
 import {ActivityIndicator, View, StyleSheet, Text, Button} from 'react-native';
 import firebase from '@firebase/app/';
 import '@firebase/auth';
+import '@firebase/database';
 
 export default class MainPage extends React.Component {
   constructor(props) {
@@ -24,10 +25,12 @@ export default class MainPage extends React.Component {
       measurementId: "G-PBE9BDJ0WQ"
     };
     // Initialize Firebase
-    if ( !firebase.apps.length ) {
+    if (!firebase.apps.length) {
       firebase.initializeApp(firebaseConfig);
     }
     // firebase.analytics();
+
+
 
   }
 
@@ -43,12 +46,14 @@ export default class MainPage extends React.Component {
 
   render() {
 
-    const data = this.props.navigation.state.params;
-    console.log('Test:');
-    console.log(this.props.navigation.state.params == undefined);
-
     return(
       <View style={styles.container}>
+
+        {/*<FlatList*/}
+        {/*  style={styes.container}*/}
+        {/*  data=this.data*/}
+        {/*/>*/}
+
         <Text>
           texto
         </Text>
@@ -76,7 +81,7 @@ const styles = StyleSheet.create({
   },
   button: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'space-around',
   },
   list: {
     flexGrow: 1,
