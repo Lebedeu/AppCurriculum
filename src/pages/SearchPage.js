@@ -9,7 +9,9 @@ import '@firebase/database';
 export default class SearchPage extends React.Component {
   constructor(props) {
     super(props);
-
+    console.ignoredYellowBox = [
+      'Setting a timer'
+    ];
     this.state = {
       nameToSearch: '',
     }
@@ -68,7 +70,7 @@ export default class SearchPage extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={styles.container}>
         <FormRow>
           <TextInput
             style={styles.input}
@@ -77,10 +79,13 @@ export default class SearchPage extends React.Component {
             onChangeText={value => this.onChangeHandler('nameToSearch', value)}
           />
         </FormRow>
-        <Button
-          title="Pesquisar"
-          onPress={() => this.search()}
-        />
+        <View style={styles.button}>
+          <Button
+            title="Pesquisar"
+            onPress={() => this.search()}
+          />
+        </View>
+
       </View>
     );
   }
@@ -91,4 +96,12 @@ const styles = StyleSheet.create ({
     paddingLeft: 5,
     paddingRight: 5,
   },
+  button: {
+    padding: 15,
+  },
+  container: {
+    paddingTop: 55,
+    paddingLeft: 15,
+    paddingRight: 15,
+  }
 });

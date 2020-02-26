@@ -11,7 +11,9 @@ import '@firebase/database';
 export default class UpdatePage extends React.Component {
   constructor(props) {
     super(props);
-
+    console.ignoredYellowBox = [
+      'Setting a timer'
+    ];
     this.state = {
       name: '',
       email: '',
@@ -112,6 +114,7 @@ export default class UpdatePage extends React.Component {
             <Camera />
           </FormRow>
 
+          <Text style={styles.text}>Nome:</Text>
           <FormRow>
             <TextInput
               style={styles.input}
@@ -121,6 +124,7 @@ export default class UpdatePage extends React.Component {
             />
           </FormRow>
 
+          <Text style={styles.text}>E-mail:</Text>
           <FormRow >
             <TextInput
               style={styles.input}
@@ -131,6 +135,7 @@ export default class UpdatePage extends React.Component {
             />
           </FormRow>
 
+          <Text style={styles.text}>Telefone:</Text>
           <FormRow>
             <TextInput
               style={styles.input}
@@ -141,6 +146,7 @@ export default class UpdatePage extends React.Component {
             />
           </FormRow>
 
+          <Text style={styles.text}>Principais Habilidades:</Text>
           <FormRow last>
             <TextInput
               style={styles.input}
@@ -186,4 +192,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-around',
     marginBottom: 20,
   },
+  text: {
+    fontSize: 10,
+  }
 });

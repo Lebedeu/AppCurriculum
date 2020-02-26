@@ -12,31 +12,31 @@ const AppNavigator = createStackNavigator({
   Main: {
     screen: MainPage,
     navigationOptions: {
-      title: 'Welcome to Main',
+      title: 'Currículos',
     }
   },
   Detail: {
     screen: DetailPage,
     navigationOptions: {
-      title: 'Welcome to Detail',
+      title: 'Infromações',
     }
   },
   Search: {
     screen: SearchPage,
     navigationOptions: {
-      title: 'Welcome to Search',
+      title: 'Pesquisa',
     }
   },
   Update: {
     screen: UpdatePage,
     navigationOptions: {
-      title: 'Welcome to Update',
+      title: 'Atualizar',
     }
   },
   Register: {
     screen: RegisterPage,
     navigationOptions: {
-      title: 'Welcome to Register',
+      title: 'Registrar',
     }
   },
 }, {

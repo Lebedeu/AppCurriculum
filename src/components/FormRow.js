@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 10,
     backgroundColor: 'white',
-    marginTop: 5,
-    marginBottom: 5,
+    marginTop: 3,
+    marginBottom: 3,
     elevation: 1,
   },
   first: {

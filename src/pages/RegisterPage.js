@@ -10,6 +10,9 @@ import '@firebase/database';
 export default class MainPage extends React.Component {
   constructor(props) {
     super(props);
+    console.ignoredYellowBox = [
+      'Setting a timer'
+    ];
     this.state = {
       name: '',
       email: '',
